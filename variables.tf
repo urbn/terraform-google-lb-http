@@ -24,6 +24,11 @@ variable region {
   default     = "us-central1"
 }
 
+variable ip_address_name {
+  description = "Name of an existing reserved external address to use."
+  default     = ""
+}
+
 variable firewall_networks {
   description = "Name of the networks to create firewall rules in"
   type        = "list"

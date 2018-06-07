@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
+data "google_compute_global_address" "default" {
+  name    = "${element(concat(google_compute_global_address.default.*.name, list("${var.ip_address_name}")), 0)}"
+}
+
+resource "google_compute_global_address" "default" {
+  count   = "${var.ip_address_name == "" ? 1 : 0}"
+  project = "${var.project}"
+  name    = "${var.name}-address"
+}
+
 resource "google_compute_global_forwarding_rule" "http" {
   project    = "${var.project}"
   name       = "${var.name}"
   target     = "${google_compute_target_http_proxy.default.self_link}"
-  ip_address = "${google_compute_global_address.default.address}"
+  ip_address = "${data.google_compute_global_address.default.address}"
   port_range = "80"
-  depends_on = ["google_compute_global_address.default"]
 }
 
 resource "google_compute_global_forwarding_rule" "https" {
@@ -28,14 +37,8 @@ resource "google_compute_global_forwarding_rule" "https" {
   count      = "${var.ssl ? 1 : 0}"
   name       = "${var.name}-https"
   target     = "${google_compute_target_https_proxy.default.self_link}"
-  ip_address = "${google_compute_global_address.default.address}"
+  ip_address = "${data.google_compute_global_address.default.address}"
   port_range = "443"
-  depends_on = ["google_compute_global_address.default"]
-}
-
-resource "google_compute_global_address" "default" {
-  project = "${var.project}"
-  name    = "${var.name}-address"
 }
 
 # HTTP proxy when ssl is false
