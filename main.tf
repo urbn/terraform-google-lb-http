@@ -74,15 +74,23 @@ resource "google_compute_backend_service" "default" {
   count         = "${length(var.backend_params)}"
   name          = "${var.name}-backend-${count.index}"
   port_name     = "${element(split(",", element(var.backend_params, count.index)), 1)}"
-  protocol      = "HTTP"
+  protocol      = "${var.ssl ? "HTTPS" : "HTTP"}"
   timeout_sec   = "${element(split(",", element(var.backend_params, count.index)), 3)}"
   backend       = ["${var.backends["${count.index}"]}"]
-  health_checks = ["${element(google_compute_http_health_check.default.*.self_link, count.index)}"]
+  health_checks = ["${element(concat(google_compute_https_health_check.default.*.self_link, google_compute_http_health_check.default.*.self_link), count.index)}"]
 }
 
 resource "google_compute_http_health_check" "default" {
   project      = "${var.project}"
-  count        = "${length(var.backend_params)}"
+  count        = "${var.ssl ? 0 : length(var.backend_params)}"
+  name         = "${var.name}-backend-${count.index}"
+  request_path = "${element(split(",", element(var.backend_params, count.index)), 0)}"
+  port         = "${element(split(",", element(var.backend_params, count.index)), 2)}"
+}
+
+resource "google_compute_https_health_check" "default" {
+  project      = "${var.project}"
+  count        = "${var.ssl ? length(var.backend_params) : 0}"
   name         = "${var.name}-backend-${count.index}"
   request_path = "${element(split(",", element(var.backend_params, count.index)), 0)}"
   port         = "${element(split(",", element(var.backend_params, count.index)), 2)}"
