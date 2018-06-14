@@ -60,9 +60,12 @@ resource "google_compute_target_https_proxy" "default" {
 resource "google_compute_ssl_certificate" "default" {
   project     = "${var.project}"
   count       = "${var.ssl ? 1 : 0}"
-  name        = "${var.name}-certificate"
+  name        = "${join("-", compact(list(var.name, "certificate", var.cert_version)))}"
   private_key = "${var.private_key}"
   certificate = "${var.certificate}"
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "google_compute_url_map" "default" {
@@ -73,14 +76,15 @@ resource "google_compute_url_map" "default" {
 }
 
 resource "google_compute_backend_service" "default" {
-  project       = "${var.project}"
-  count         = "${length(var.backend_params)}"
-  name          = "${var.name}-backend-${count.index}"
-  port_name     = "${element(split(",", element(var.backend_params, count.index)), 1)}"
-  protocol      = "${var.ssl ? "HTTPS" : "HTTP"}"
-  timeout_sec   = "${element(split(",", element(var.backend_params, count.index)), 3)}"
-  backend       = ["${var.backends["${count.index}"]}"]
-  health_checks = ["${element(concat(google_compute_https_health_check.default.*.self_link, google_compute_http_health_check.default.*.self_link), count.index)}"]
+  project         = "${var.project}"
+  count           = "${length(var.backend_params)}"
+  name            = "${var.name}-backend-${count.index}"
+  port_name       = "${element(split(",", element(var.backend_params, count.index)), 1)}"
+  protocol        = "${var.ssl ? "HTTPS" : "HTTP"}"
+  timeout_sec     = "${element(split(",", element(var.backend_params, count.index)), 3)}"
+  backend         = ["${var.backends["${count.index}"]}"]
+  security_policy = "${var.security_policy}"
+  health_checks   = ["${element(concat(google_compute_https_health_check.default.*.self_link, google_compute_http_health_check.default.*.self_link), count.index)}"]
 }
 
 resource "google_compute_http_health_check" "default" {

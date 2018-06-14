@@ -78,3 +78,13 @@ variable certificate {
   description = "Content of the SSL certificate. Required if ssl is `true`."
   default     = ""
 }
+
+variable security_policy {
+  description = "Backend service security policy. Will be applied to all backends if supplied."
+  default     = ""
+}
+
+variable cert_version {
+  description = "The version of the certificate and key combination. Used to avoid naming conflicts on update."
+  default     = ""
+}
