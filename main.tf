@@ -85,6 +85,7 @@ resource "google_compute_backend_service" "default" {
   backend         = ["${var.backends["${count.index}"]}"]
   security_policy = "${var.security_policy}"
   health_checks   = ["${element(concat(google_compute_https_health_check.default.*.self_link, google_compute_http_health_check.default.*.self_link), count.index)}"]
+  connection_draining_timeout_sec = "${var.connection_draining_timeout_sec}"
 }
 
 resource "google_compute_http_health_check" "default" {

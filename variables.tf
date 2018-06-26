@@ -88,3 +88,7 @@ variable cert_version {
   description = "The version of the certificate and key combination. Used to avoid naming conflicts on update."
   default     = ""
 }
+
+variable connection_draining_timeout_sec {
+  default = 60
+}
