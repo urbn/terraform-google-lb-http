@@ -31,7 +31,7 @@ variable ip_address_name {
 
 variable firewall_networks {
   description = "Name of the networks to create firewall rules in"
-  type        = "list"
+  type        = list
   default     = ["default"]
 }
 
@@ -41,17 +41,17 @@ variable name {
 
 variable target_tags {
   description = "List of target tags for health check firewall rule."
-  type        = "list"
+  type        = list
 }
 
 variable backends {
   description = "Map backend indices to list of backend maps."
-  type        = "map"
+  type        = map
 }
 
 variable backend_params {
   description = "Comma-separated encoded list of parameters in order: health check path, service port name, service port, backend timeout seconds"
-  type        = "list"
+  type        = list
 }
 
 variable create_url_map {
