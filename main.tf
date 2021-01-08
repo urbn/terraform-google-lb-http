@@ -30,10 +30,6 @@ resource "google_compute_global_forwarding_rule" "http" {
   target     = google_compute_target_http_proxy.default.self_link
   ip_address = data.google_compute_global_address.default.address
   port_range = "80"
-
-  lifecycle {
-    ignore_changes = [ip_address]
-  }
 }
 
 resource "google_compute_global_forwarding_rule" "https" {
@@ -43,10 +39,6 @@ resource "google_compute_global_forwarding_rule" "https" {
   target     = google_compute_target_https_proxy.default[count.index].self_link
   ip_address = data.google_compute_global_address.default.address
   port_range = "443"
-
-  lifecycle {
-    ignore_changes = [ip_address]
-  }
 }
 
 # HTTP proxy when ssl is false
