@@ -116,7 +116,7 @@ resource "google_compute_https_health_check" "default" {
 }
 
 resource "google_compute_firewall" "default-hc" {
-  count         = length(var.backend_params) * length(var.firewall_networks)
+  count         = length(var.firewall_networks)
   project       = var.project
   name          = "${var.name}-hc-${count.index}"
   network       = element(var.firewall_networks, count.index)
@@ -125,6 +125,6 @@ resource "google_compute_firewall" "default-hc" {
 
   allow {
     protocol = "tcp"
-    ports    = [element(split(",", element(var.backend_params, count.index)), 2)]
+    ports    = distinct([for params in var.backend_params : element(split(",", params), 2)])
   }
 }
