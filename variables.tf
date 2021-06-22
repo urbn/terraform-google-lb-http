@@ -50,7 +50,7 @@ variable backends {
 }
 
 variable backend_params {
-  description = "Comma-separated encoded list of parameters in order: health check path, service port name, service port, backend timeout seconds"
+  description = "Comma-separated encoded list of parameters in order: health check path, service port name, service port, backend timeout seconds, host header"
   type        = list
 }
 

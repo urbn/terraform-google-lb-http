@@ -104,6 +104,8 @@ resource "google_compute_http_health_check" "default" {
   request_path       = element(split(",", element(var.backend_params, count.index)), 0)
   port               = element(split(",", element(var.backend_params, count.index)), 2)
   check_interval_sec = element(split(",", element(var.backend_params, count.index)), 4)
+  # Check if host header is in the backend_params list, add it to health check if it is.
+  host               = length(split(",", (element(var.backend_params, count.index)))) > 5 ? element(split(",", element(var.backend_params, count.index)), 5) : ""
 }
 
 resource "google_compute_https_health_check" "default" {
@@ -113,6 +115,8 @@ resource "google_compute_https_health_check" "default" {
   request_path       = element(split(",", element(var.backend_params, count.index)), 0)
   port               = element(split(",", element(var.backend_params, count.index)), 2)
   check_interval_sec = element(split(",", element(var.backend_params, count.index)), 4)
+  # Check if host header is in the backend_params list, add it to health check if it is.
+  host               = length(split(",", (element(var.backend_params, count.index)))) > 5 ? element(split(",", element(var.backend_params, count.index)), 5) : ""
 }
 
 resource "google_compute_firewall" "default-hc" {
