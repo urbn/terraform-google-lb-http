@@ -54,7 +54,7 @@ resource "google_compute_target_https_proxy" "default" {
   count            = var.ssl ? 1 : 0
   name             = "${var.name}-https-proxy"
   url_map          = element(compact(concat(list(var.url_map), google_compute_url_map.default.*.self_link)), 0)
-  ssl_certificates = [google_compute_ssl_certificate.default[count.index].self_link, "projects/ecomm-browse-staging/global/sslCertificates/fp-san-cert-05-31-2023"]
+  ssl_certificates = [google_compute_ssl_certificate.default[count.index].self_link, "projects/ecomm-browse-staging/global/sslCertificates/fp-san-05-31-2023"]
   quic_override    = "NONE"
 }
 
