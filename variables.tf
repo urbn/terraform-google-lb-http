@@ -19,7 +19,7 @@ variable project {
   default     = ""
 }
 
-variable brand_san {
+variable manually_added_san {
   description = "add if a manually added san cert is on the LB"
   default     = ""
 }
