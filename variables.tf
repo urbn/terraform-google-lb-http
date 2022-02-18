@@ -19,6 +19,16 @@ variable project {
   default     = ""
 }
 
+variable brand_san {
+  description = "add if a manually added san cert is on the LB"
+  default     = ""
+}
+
+variable fe_certs {
+  description = "set to true to add a brand_san"
+  default     = "false"
+}
+
 variable region {
   description = "Region for cloud resources"
   default     = "us-central1"
