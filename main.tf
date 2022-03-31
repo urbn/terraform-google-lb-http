@@ -93,7 +93,7 @@ resource "google_compute_backend_service" "default" {
 
     content {
       group = backend.value["group"]
-	    balancing_mode  = backend.value["balancing_mode"]
+      balancing_mode  = backend.value["balancing_mode"]
       capacity_scaler = backend.value["capacity_scaler"]
       max_utilization = backend.value["max_utilization"]      
     }
