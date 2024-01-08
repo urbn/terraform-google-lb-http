@@ -70,6 +70,35 @@ resource "google_compute_ssl_certificate" "default" {
   }
 }
 
+# HTTP(S) Redirect
+
+resource "google_compute_url_map" "https_redirect" {
+  project = var.project
+  count   = var.https_redirect ? 1 : 0
+  name    = "${var.name}-url-map-https-redirect"
+  default_url_redirect {
+    https_redirect         = true
+    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
+    strip_query            = false
+  }
+}
+
+resource "google_compute_target_http_proxy" "http_redirect" {
+  project = var.project
+  count   = var.https_redirect ? 1 : 0
+  name    = "${var.name}-http-redirect"
+  url_map = element(compact(concat(list(var.url_map), google_compute_url_map.https_redirect.*.self_link)), 0)
+}
+
+resource "google_compute_global_forwarding_rule" "http_redirect" {
+  project    = var.project
+  count      = var.https_redirect ? 1 : 0
+  name       = var.name
+  target     = google_compute_target_http_proxy.http_redirect[count.index].self_link
+  ip_address = data.google_compute_global_address.default.address
+  port_range = "80"
+}
+
 resource "google_compute_url_map" "default" {
   project         = var.project
   count           = var.create_url_map ? 1 : 0
