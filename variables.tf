@@ -102,3 +102,9 @@ variable cert_version {
 variable connection_draining_timeout_sec {
   default = 60
 }
+
+variable "https_redirect" {
+  description = "Set to `true` to enable https redirect on the lb."
+  type        = bool
+  default     = false
+}
