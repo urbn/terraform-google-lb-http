@@ -93,7 +93,7 @@ resource "google_compute_target_http_proxy" "http_redirect" {
 resource "google_compute_global_forwarding_rule" "http_redirect" {
   project    = var.project
   count      = var.https_redirect ? 1 : 0
-  name       = var.name
+  name       = "${var.name}-https-redirect"
   target     = google_compute_target_http_proxy.http_redirect[count.index].self_link
   ip_address = data.google_compute_global_address.default.address
   port_range = "80"
