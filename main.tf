@@ -24,14 +24,6 @@ resource "google_compute_global_address" "default" {
   name    = "${var.name}-address"
 }
 
-resource "google_compute_global_forwarding_rule" "http" {
-  project    = var.project
-  name       = var.name
-  target     = google_compute_target_http_proxy.default.self_link
-  ip_address = data.google_compute_global_address.default.address
-  port_range = "80"
-}
-
 resource "google_compute_global_forwarding_rule" "https" {
   project    = var.project
   count      = var.ssl ? 1 : 0
@@ -39,13 +31,6 @@ resource "google_compute_global_forwarding_rule" "https" {
   target     = google_compute_target_https_proxy.default[count.index].self_link
   ip_address = data.google_compute_global_address.default.address
   port_range = "443"
-}
-
-# HTTP proxy when ssl is false
-resource "google_compute_target_http_proxy" "default" {
-  project = var.project
-  name    = "${var.name}-http-proxy"
-  url_map = element(compact(concat(list(var.url_map), google_compute_url_map.default.*.self_link)), 0)
 }
 
 # HTTPS proxy  when ssl is true
