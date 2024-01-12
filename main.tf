@@ -72,7 +72,7 @@ resource "google_compute_target_http_proxy" "http_redirect" {
   project = var.project
   count   = var.https_redirect ? 1 : 0
   name    = "${var.name}-http-redirect"
-  url_map = element(compact(concat(list(var.url_map), google_compute_url_map.https_redirect.*.self_link)), 0)
+  url_map = google_compute_url_map.https_redirect.*.self_link
 }
 
 resource "google_compute_global_forwarding_rule" "http_redirect" {
