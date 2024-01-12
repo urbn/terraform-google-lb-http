@@ -60,7 +60,7 @@ resource "google_compute_ssl_certificate" "default" {
 resource "google_compute_url_map" "https_redirect" {
   project = var.project
   count   = var.https_redirect ? 1 : 0
-  name    = "${var.name}-url-map-https-redirect"
+  name    = "${var.name}-https-redirect"
   default_url_redirect {
     https_redirect         = true
     redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
@@ -68,18 +68,18 @@ resource "google_compute_url_map" "https_redirect" {
   }
 }
 
-resource "google_compute_target_http_proxy" "http_redirect" {
+resource "google_compute_target_http_proxy" "https_redirect" {
   project = var.project
   count   = var.https_redirect ? 1 : 0
-  name    = "${var.name}-http-redirect"
-  url_map = google_compute_url_map.https_redirect.*.self_link
+  name    = "${var.name}-https-redirect"
+  url_map = google_compute_url_map.https_redirect[count.index].self_link
 }
 
-resource "google_compute_global_forwarding_rule" "http_redirect" {
+resource "google_compute_global_forwarding_rule" "https_redirect" {
   project    = var.project
   count      = var.https_redirect ? 1 : 0
   name       = "${var.name}-https-redirect"
-  target     = google_compute_target_http_proxy.http_redirect[count.index].self_link
+  target     = google_compute_target_http_proxy.https_redirect[count.index].self_link
   ip_address = data.google_compute_global_address.default.address
   port_range = "80"
 }
