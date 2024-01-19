@@ -114,7 +114,7 @@ resource "google_compute_backend_service" "default" {
   protocol                        = var.ssl ? "HTTPS" : "HTTP"
   timeout_sec                     = element(split(",", element(var.backend_params, count.index)), 3)
   # not using element operator since the default behavior is to roll over (mod operation) the index which will return the wrong item from the list if index 6 does not exist
-  security_policy                 = split(",", element(var.backend_params, count.index))[6] ? split(",", element(var.backend_params, count.index))[6] : var.security_policy
+  security_policy                 = split(",", element(var.backend_params, count.index))[6] != "" ? split(",", element(var.backend_params, count.index))[6] : var.security_policy
   health_checks                   = [element(concat(google_compute_https_health_check.default.*.self_link, google_compute_http_health_check.default.*.self_link), count.index)]
   connection_draining_timeout_sec = var.connection_draining_timeout_sec
 
