@@ -89,6 +89,11 @@ variable certificate {
   default     = ""
 }
 
+variable certificate_map {
+  description = "Link to the Certificate Map. Required if ssl is `true`."
+  default     = ""
+}
+
 variable security_policy {
   description = "Backend service security policy. Will be applied to all backends if supplied."
   default     = ""
