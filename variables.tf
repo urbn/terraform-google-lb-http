@@ -96,12 +96,14 @@ variable certificate_map {
 
 variable use_ssl_certs {
   description = "Set to true if using SSL certs directly attached to the GLB."
-  default     = ""
+  type        = bool
+  default     = false
 }
 
 variable use_cert_map {
   description = "Set to true if using a GCP Cert Map on the target proxy."
-  default     = ""
+  type        = bool
+  default     = false
 }
 
 variable security_policy {
