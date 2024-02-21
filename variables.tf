@@ -89,6 +89,16 @@ variable certificate {
   default     = ""
 }
 
+variable certmap {
+  description = "Link to the Certificate Map value at the GLB."
+  default     = null
+}
+
+variable sslcert {
+  description = "Flag for `ssl_certificates`. 'true' uses what's in the module. false sets the argument to null."
+  default     = true
+}
+
 variable security_policy {
   description = "Backend service security policy. Will be applied to all backends if supplied."
   default     = ""
