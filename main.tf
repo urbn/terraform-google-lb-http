@@ -54,17 +54,13 @@ resource "google_compute_target_https_proxy" "default" {
   count            = var.ssl ? 1 : 0
   name             = "${var.name}-https-proxy"
   url_map          = element(compact(concat(list(var.url_map), google_compute_url_map.default.*.self_link)), 0)
-  dynamic "ssl_certificates" {
-    for_each           = var.use_ssl_certs ? [1] : []
-    content {
-      ssl_certificates = flatten([google_compute_ssl_certificate.default[count.index].self_link, var.fe_certs == "true" ? ["https://www.googleapis.com/compute/v1/projects/${var.project}/global/sslCertificates/${var.manually_added_san}"] : []])
-    }
+  ssl_certificates {
+    count = var.use_ssl_certs ? 1 : 0
+    ssl_certificates = flatten([google_compute_ssl_certificate.default[count.index].self_link, var.fe_certs == "true" ? ["https://www.googleapis.com/compute/v1/projects/${var.project}/global/sslCertificates/${var.manually_added_san}"] : []])
   }
-  dynamic "certificate_map" {
-    for_each           = var.use_cert_map ? [1] : []
-    content {
-      certificate_map  = var.certificate_map
-    }
+  certificate_map {
+    count = var.use_cert_map ? 1 : 0
+    certificate_map  = var.certificate_map
   }
   quic_override    = "NONE"
 }
