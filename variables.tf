@@ -94,18 +94,6 @@ variable certificate_map {
   default     = ""
 }
 
-variable use_ssl_certs {
-  description = "Set to true if using SSL certs directly attached to the GLB."
-  type        = bool
-  default     = false
-}
-
-variable use_cert_map {
-  description = "Set to true if using a GCP Cert Map on the target proxy."
-  type        = bool
-  default     = false
-}
-
 variable security_policy {
   description = "Backend service security policy. Will be applied to all backends if supplied."
   default     = ""
