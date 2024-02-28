@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
+variable google_provider_version {
+  description = "Google provider-version for TF."
+  default     = "4.84.0"
+}
+
+variable google_beta_provider_version {
+  description = "Google beta provider-version for TF."
+  default     = "4.84.0"
+}
+
 variable project {
   description = "The project to deploy to, if not set the default provider project is used."
   default     = ""

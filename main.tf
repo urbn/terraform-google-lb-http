@@ -15,7 +15,6 @@
  */
 
 data "google_compute_global_address" "default" {
-  provider = module.provider-version.google
   name     = element(concat(google_compute_global_address.default.*.name, list(var.ip_address_name)), 0)
 }
 
