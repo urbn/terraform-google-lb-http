@@ -15,7 +15,7 @@
  */
 
 data "google_compute_global_address" "default" {
-  name     = element(concat(google_compute_global_address.default.*.name, list(var.ip_address_name)), 0)
+  name = element(concat(google_compute_global_address.default.*.name, list(var.ip_address_name)), 0)
 }
 
 resource "google_compute_global_address" "default" {
