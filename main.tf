@@ -46,7 +46,6 @@ resource "google_compute_target_https_proxy" "default" {
 
 resource "google_compute_ssl_certificate" "default" {
   project     = var.project
-  count       = var.sslcert ? 1 : 0
   name        = join("-", compact(list(var.name, "certificate", var.cert_version)))
   private_key = var.private_key
   certificate = var.certificate
