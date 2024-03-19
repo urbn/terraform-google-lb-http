@@ -15,7 +15,7 @@
  */
 
 data "google_compute_global_address" "default" {
-  name = element(concat(google_compute_global_address.default.*.name, list(var.ip_address_name)), 0)
+  name = element(concat(google_compute_global_address.default.*.name, tolist([var.ip_address_name])), 0)
 }
 
 resource "google_compute_global_address" "default" {
@@ -38,7 +38,7 @@ resource "google_compute_target_https_proxy" "default" {
   project          = var.project
   count            = var.ssl ? 1 : 0
   name             = "${var.name}-https-proxy"
-  url_map          = element(compact(concat(list(var.url_map), google_compute_url_map.default.*.self_link)), 0)
+  url_map          = element(compact(concat(tolist([var.url_map]), google_compute_url_map.default.*.self_link)), 0)
   ssl_certificates = var.sslcert ? flatten([google_compute_ssl_certificate.default[count.index].self_link, var.fe_certs == "true" ? ["https://www.googleapis.com/compute/v1/projects/${var.project}/global/sslCertificates/${var.manually_added_san}"] : []]) : null
   certificate_map  = var.certmap
   quic_override    = "NONE"
@@ -47,7 +47,7 @@ resource "google_compute_target_https_proxy" "default" {
 resource "google_compute_ssl_certificate" "default" {
   project     = var.project
   count       = var.ssl ? 1 : 0
-  name        = join("-", compact(list(var.name, "certificate", var.cert_version)))
+  name        = join("-", compact(tolist([var.name, "certificate", var.cert_version])))
   private_key = var.private_key
   certificate = var.certificate
 
