@@ -93,7 +93,8 @@ resource "google_compute_backend_service" "default" {
     for_each = var.backends[count.index]
 
     content {
-      group = backend.value["group"]
+      group           = backend.value["group"]
+      max_utilization = lookup(backend.value, "max_utilization", 0.80)
     }
   }
 }
