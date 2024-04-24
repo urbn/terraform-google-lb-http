@@ -19,16 +19,6 @@ variable project {
   default     = ""
 }
 
-variable manually_added_san {
-  description = "add if a manually added san cert is on the LB"
-  default     = ""
-}
-
-variable fe_certs {
-  description = "set to true to add a brand_san"
-  default     = "false"
-}
-
 variable region {
   description = "Region for cloud resources"
   default     = "us-central1"
@@ -75,18 +65,8 @@ variable url_map {
 }
 
 variable ssl {
-  description = "Set to `true` to enable SSL support, requires variables `private_key` and `certificate`."
+  description = "Set to `true` to enable SSL support. Requires `certmap` entry."
   default     = false
-}
-
-variable private_key {
-  description = "Content of the private SSL key. Required if ssl is `true`."
-  default     = ""
-}
-
-variable certificate {
-  description = "Content of the SSL certificate. Required if ssl is `true`."
-  default     = ""
 }
 
 variable certmap {
@@ -94,18 +74,8 @@ variable certmap {
   default     = null
 }
 
-variable sslcert {
-  description = "Flag for `ssl_certificates`. 'true' uses what's in the module. false sets the argument to null."
-  default     = true
-}
-
 variable security_policy {
   description = "Backend service security policy. Will be applied to all backends if supplied."
-  default     = ""
-}
-
-variable cert_version {
-  description = "The version of the certificate and key combination. Used to avoid naming conflicts on update."
   default     = ""
 }
 
