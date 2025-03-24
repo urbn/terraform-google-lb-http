@@ -88,9 +88,3 @@ variable "https_redirect" {
   type        = bool
   default     = false
 }
-
-variable "backend_security_policies" {
-  description = "List of security policies for each backend. If not provided, the default security policy will be used."
-  type        = list(string)
-  default     = []
-}
